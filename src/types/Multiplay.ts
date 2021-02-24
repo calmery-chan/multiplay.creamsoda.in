@@ -45,5 +45,7 @@ export type MultiplayUpdatePayload = {
 
 export type MultiplayUpdateResponse = {
   playerId: string;
-  payload: MultiplayUpdatePayload;
+  payload: MultiplayUpdatePayload & {
+    updatedAt: number
+  };
 };

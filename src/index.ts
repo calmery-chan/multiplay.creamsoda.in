@@ -162,6 +162,7 @@ const update = async (
           y: rotation.y
         },
         state,
+        updatedAt: new Date().getTime()
       }
     })
   );
