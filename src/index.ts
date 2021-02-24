@@ -33,7 +33,7 @@ app.get("/", (_, response) => {
   response.status(200).end();
 })
 
-const server = app.listen(process.env.NODE_ENV || 5000);
+const server = app.listen(process.env.PORT || 5000);
 
 /* --- Socket.IO --- */
 
