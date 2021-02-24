@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-app.get("/", (_, response) => {
+app.get("/a/dream", (_, response) => {
   response.status(200).end();
 })
 
