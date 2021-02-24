@@ -32,6 +32,7 @@ export type MultiplayUpdatePayload = {
   area: MultiplayArea;
   position: {
     x: number;
+    y: number;
     z: number;
   };
   rotation: {

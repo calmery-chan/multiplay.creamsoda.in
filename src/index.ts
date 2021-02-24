@@ -155,6 +155,7 @@ const update = async (
         area,
         position: {
           x: position.x,
+          y: position.y,
           z: position.z
         },
         rotation: {
