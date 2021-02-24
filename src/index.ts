@@ -61,7 +61,7 @@ const getCanParticipateGroupId = () => {
       if (groups[x] > groups[y]) return -1;
       return 0;
     })
-    .find(group => groups[group] < 8 && uuid.validate(group));
+    .find(group => groups[group] < 4 && uuid.validate(group));
 
   if (maybeGroupId) {
     return maybeGroupId;
