@@ -10,9 +10,7 @@ export type MultiplaySocket = Socket & {
 
 // Payload
 
-export type MultiplayJoinPayload = {
-  groupId?: string;
-};
+export type MultiplayJoinPayload = string | undefined
 
 // Response
 

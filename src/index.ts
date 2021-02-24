@@ -84,12 +84,14 @@ const getPlayerIds = (groupId: string) => {
 
 const join = async (
   socket: MultiplaySocket,
-  { groupId: _groupId }: MultiplayJoinPayload
+  maybeGroupId: MultiplayJoinPayload
 ) => {
   if (socket.groupId) return;
 
-  const groupId = _groupId || getCanParticipateGroupId();
+  const groupId = maybeGroupId || getCanParticipateGroupId();
   await socket.join(groupId);
+
+  console.log(groupId)
 
   const playerIds = getPlayerIds(groupId);
   groups[groupId] = playerIds.length;
