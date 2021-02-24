@@ -141,7 +141,7 @@ const leave = async (socket: MultiplaySocket) => {
 
 const update = async (
   socket: MultiplaySocket,
-  { area, position, rotation, state }: MultiplayUpdatePayload
+  { accessory, area, position, rotation, state }: MultiplayUpdatePayload
 ) => {
   if (!socket.groupId) {
     return;
@@ -152,6 +152,7 @@ const update = async (
     response<MultiplayUpdateResponse>({
       playerId: socket.id,
       payload: {
+        accessory,
         area,
         position: {
           x: position.x,

@@ -29,6 +29,7 @@ export type MultiplayLeaveGroupResponse = string[];
 // Payload
 
 export type MultiplayUpdatePayload = {
+  accessory: "pancake" | "fried_egg" | null
   area: MultiplayArea;
   position: {
     x: number;
