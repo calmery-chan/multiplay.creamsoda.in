@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import * as uuid from "uuid";
 import {
   MultiplayJoinGroupResponse,
@@ -61,7 +61,7 @@ const getCanParticipateGroupId = () => {
       if (groups[x] > groups[y]) return -1;
       return 0;
     })
-    .find(group => groups[group] < 8);
+    .find(group => groups[group] < 8 && uuid.validate(group));
 
   if (maybeGroupId) {
     return maybeGroupId;
@@ -80,18 +80,29 @@ const getPlayerIds = (groupId: string) => {
   return Array.from(group.keys());
 };
 
+const validateGroupId = (maybeGroupId?: string) => {
+  if (!maybeGroupId) {
+    return true;
+  }
+
+  const matched = maybeGroupId.match(/\w+/)
+
+  return 4 <= maybeGroupId.length
+    && maybeGroupId.length <= 16
+    && matched
+    && matched[0] === maybeGroupId
+}
+
 // Events
 
 const join = async (
   socket: MultiplaySocket,
   maybeGroupId: MultiplayJoinPayload
 ) => {
-  if (socket.groupId) return;
+  if (socket.groupId || !validateGroupId(maybeGroupId)) return;
 
   const groupId = maybeGroupId || getCanParticipateGroupId();
   await socket.join(groupId);
-
-  console.log(groupId)
 
   const playerIds = getPlayerIds(groupId);
   groups[groupId] = playerIds.length;
@@ -130,7 +141,7 @@ const leave = async (socket: MultiplaySocket) => {
 
 const update = async (
   socket: MultiplaySocket,
-  { position, rotation }: MultiplayUpdatePayload
+  { area, position, rotation, state }: MultiplayUpdatePayload
 ) => {
   if (!socket.groupId) {
     return;
@@ -141,13 +152,15 @@ const update = async (
     response<MultiplayUpdateResponse>({
       playerId: socket.id,
       payload: {
+        area,
         position: {
           x: position.x,
           z: position.z
         },
         rotation: {
           y: rotation.y
-        }
+        },
+        state,
       }
     })
   );

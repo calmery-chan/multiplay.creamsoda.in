@@ -29,6 +29,7 @@ export type MultiplayLeaveGroupResponse = string[];
 // Payload
 
 export type MultiplayUpdatePayload = {
+  area: MultiplayArea;
   position: {
     x: number;
     z: number;
@@ -36,6 +37,7 @@ export type MultiplayUpdatePayload = {
   rotation: {
     y: number;
   };
+  state: "idle" | "run" | "walk"
 };
 
 // Response
