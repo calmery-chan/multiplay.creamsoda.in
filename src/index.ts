@@ -36,7 +36,7 @@ app.use(
 
 app.get("/a/dream", (_, response) => {
   response.status(200).end();
-})
+});
 
 const server = app.listen(process.env.PORT || 5000);
 
@@ -90,13 +90,15 @@ const validateGroupId = (maybeGroupId?: string) => {
     return true;
   }
 
-  const matched = maybeGroupId.match(/\w+/)
+  const matched = maybeGroupId.match(/\w+/);
 
-  return 4 <= maybeGroupId.length
-    && maybeGroupId.length <= 16
-    && matched
-    && matched[0] === maybeGroupId
-}
+  return (
+    4 <= maybeGroupId.length &&
+    maybeGroupId.length <= 16 &&
+    matched &&
+    matched[0] === maybeGroupId
+  );
+};
 
 // Events
 
@@ -155,7 +157,7 @@ const update = async (
 
   const broadcast = metaneno
     ? socket.broadcast
-    : socket.broadcast.to(socket.groupId)
+    : socket.broadcast.to(socket.groupId);
 
   broadcast.emit(
     "updated",
@@ -193,7 +195,7 @@ io.on("connection", (socket: MultiplaySocket) => {
 
   //
 
-  const { authorization } = socket.request.headers
+  const { authorization } = socket.request.headers;
 
   if (
     authorization &&

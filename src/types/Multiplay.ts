@@ -10,7 +10,7 @@ export type MultiplaySocket = Socket & {
 
 // Payload
 
-export type MultiplayJoinPayload = string | undefined
+export type MultiplayJoinPayload = string | undefined;
 
 // Response
 
@@ -29,7 +29,7 @@ export type MultiplayLeaveGroupResponse = string[];
 // Payload
 
 export type MultiplayUpdatePayload = {
-  accessory: "pancake" | "fried_egg" | null
+  accessory: "pancake" | "fried_egg" | null;
   area: MultiplayArea;
   position: {
     x: number;
@@ -39,7 +39,7 @@ export type MultiplayUpdatePayload = {
   rotation: {
     y: number;
   };
-  state: "idle" | "run" | "walk"
+  state: "idle" | "run" | "walk";
 };
 
 // Response
@@ -48,6 +48,6 @@ export type MultiplayUpdateResponse = {
   playerId: string;
   payload: MultiplayUpdatePayload & {
     metaneno: boolean;
-    updatedAt: number
+    updatedAt: number;
   };
 };
