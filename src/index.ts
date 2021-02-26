@@ -1,4 +1,5 @@
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import { Server } from "socket.io";
 import * as uuid from "uuid";
@@ -11,6 +12,10 @@ import {
   MultiplayUpdatePayload,
   MultiplayUpdateResponse
 } from "./types/Multiplay";
+
+/* --- Env --- */
+
+dotenv.config();
 
 /* --- Constants --- */
 
@@ -140,6 +145,7 @@ const leave = async (socket: MultiplaySocket) => {
 };
 
 const update = async (
+  metaneno: boolean,
   socket: MultiplaySocket,
   { accessory, area, position, rotation, state }: MultiplayUpdatePayload
 ) => {
@@ -147,13 +153,18 @@ const update = async (
     return;
   }
 
-  socket.broadcast.to(socket.groupId).emit(
+  const broadcast = metaneno
+    ? socket.broadcast
+    : socket.broadcast.to(socket.groupId)
+
+  broadcast.emit(
     "updated",
     response<MultiplayUpdateResponse>({
       playerId: socket.id,
       payload: {
         accessory,
         area,
+        metaneno,
         position: {
           x: position.x,
           y: position.y,
@@ -175,10 +186,22 @@ io.on("connection", (socket: MultiplaySocket) => {
   const handleDisconnect = leave.bind(null, socket);
   const handleJoin = join.bind(null, socket);
   const handleLeave = leave.bind(null, socket);
-  const handleUpdate = update.bind(null, socket);
 
   socket.on("disconnect", handleDisconnect);
   socket.on("join", handleJoin);
   socket.on("leave", handleLeave);
-  socket.on("update", handleUpdate);
+
+  //
+
+  const { authorization } = socket.request.headers
+
+  if (
+    authorization &&
+    authorization.startsWith("Token") &&
+    authorization.slice(6) === process.env.METANENO_TOKEN
+  ) {
+    socket.on("update", update.bind(null, true, socket));
+  } else {
+    socket.on("update", update.bind(null, false, socket));
+  }
 });
